@@ -1,0 +1,114 @@
+﻿<Window
+    x:Class="SudokuWPF.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:SudokuWPF"
+    Title="MainWindow"
+    Width="900"
+    Height="920"
+    Topmost="True"
+    UseLayoutRounding="True"
+    mc:Ignorable="d"
+    >
+    <Window.Resources>
+        <local:FontSizeConverter x:Key="FontSizeConverter" />
+    </Window.Resources>
+    <Grid Margin="10">
+        <ItemsControl
+            Name="parent"
+            Height="{Binding RelativeSource={RelativeSource Mode=Self}, Path=ActualWidth}"
+            Margin="0,0,-3,0"
+            VerticalAlignment="Top"
+            ItemsSource="{Binding Sudoku.Chunks}"
+            >
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid
+                        Columns="{Binding Sudoku.CountChunksInDimension}"
+                        ClipToBounds="True"
+                        />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="-3,-3,0,0">
+                        <Grid Margin="5">
+                            <ItemsControl ItemsSource="{Binding ChunkData}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid
+                                            Columns="{Binding DataContext.Sudoku.CountChunksInDimension, ElementName=parent}"
+                                            ClipToBounds="True"
+                                            />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="-2,-2,0,0">
+                                            <Border
+                                                Name="numberContainer"
+                                                Background="Gray"
+                                                Margin="7"
+                                                CornerRadius="100"
+                                                >
+                                                <TextBlock
+                                                    Text="{Binding Value}"
+                                                    FontSize="{Binding ElementName=numberContainer, Path=ActualWidth, Converter={StaticResource FontSizeConverter}}"
+                                                    Margin="-1,-7,0,0"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    TextAlignment="Center"
+                                                    />
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Value}" Value="0">
+                                                                <Setter Property="Visibility"  Value="Hidden" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                            </Border>
+                                            <Border
+                                                Background="Black"
+                                                Height="2"
+                                                Margin="5,0"
+                                                VerticalAlignment="Top"
+                                                />
+                                            <Border
+                                                Background="Black"
+                                                Width="2"
+                                                Margin="0,5"
+                                                HorizontalAlignment="Left"
+                                                />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Grid>
+
+                        <Border
+                            Background="Black"
+                            Height="3"
+                            Margin="10,0"
+                            VerticalAlignment="Top"
+                            />
+                        <Border
+                            Background="Black"
+                            Width="3"
+                            Margin="0,10"
+                            HorizontalAlignment="Left"
+                            />
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <Border
+            BorderThickness="3"
+            BorderBrush="White"
+            />
+    </Grid>
+</Window>
